@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Assistant | AI Business Intelligence</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6fb;
+            color: #172033;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 260px;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #111827, #1e293b);
+            color: white;
+            padding: 25px 18px;
+            box-sizing: border-box;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        .brand {
+            padding: 5px 12px 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            margin-bottom: 14px;
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 19px;
+            line-height: 1.3;
+        }
+
+        .brand p {
+            margin: 7px 0 0;
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        .nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 14px;
+            margin: 5px 0;
+            border-radius: 10px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .nav a:hover {
+            background: rgba(99,102,241,0.18);
+            color: white;
+        }
+
+        .nav a.active {
+            background: linear-gradient(90deg, #6366f1, #4f46e5);
+            color: white;
+            box-shadow: 0 7px 18px rgba(79,70,229,0.25);
+        }
+
+        /* MAIN */
+
+        .main-content {
+            margin-left: 260px;
+            width: calc(100% - 260px);
+            padding: 32px;
+            box-sizing: border-box;
+        }
+
+        /* HEADER */
+
+        .page-header {
+            background: linear-gradient(135deg, #111827, #4f46e5);
+            color: white;
+            border-radius: 22px;
+            padding: 30px 34px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 15px 35px rgba(30,41,59,0.15);
+        }
+
+        .page-header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #dbeafe;
+            font-size: 13px;
+        }
+
+        .header-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        /* AI CARD */
+
+        .ai-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 900px;
+            box-shadow: 0 10px 28px rgba(15,23,42,0.07);
+        }
+
+        .ai-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 25px;
+        }
+
+        .ai-title-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: #eef2ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .ai-title h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .ai-title p {
+            margin: 5px 0 0;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        /* FORM */
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 9px;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            box-sizing: border-box;
+            border: 1px solid #dbe2ea;
+            border-radius: 12px;
+            resize: vertical;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            color: #172033;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .form-group textarea:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+        }
+
+        /* ACTIONS */
+
+        .action-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .voice-btn,
+        .process-btn {
+            border: none;
+            padding: 13px 20px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .voice-btn {
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+
+        .voice-btn:hover {
+            background: #e0e7ff;
+        }
+
+        .process-btn {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            box-shadow: 0 7px 18px rgba(79,70,229,0.2);
+        }
+
+        .process-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px rgba(79,70,229,0.28);
+        }
+
+        /* DOCUMENT */
+
+        .document-section {
+            margin-top: 22px;
+            padding-top: 22px;
+            border-top: 1px solid #eef2f7;
+        }
+
+        .document-section h3 {
+            margin: 0 0 6px;
+            font-size: 14px;
+        }
+
+        .document-section p {
+            margin: 0 0 14px;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        .document-btn {
+            display: inline-block;
+            padding: 12px 18px;
+            border-radius: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: #334155;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .document-btn:hover {
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+
+        /* INFO */
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-top: 22px;
+            max-width: 960px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 22px rgba(15,23,42,0.05);
+        }
+
+        .info-card .icon {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .info-card h3 {
+            margin: 0 0 7px;
+            font-size: 13px;
+        }
+
+        .info-card p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        /* FOOTER */
+
+        .page-footer {
+            margin-top: 22px;
+        }
+
+        .dashboard-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 10px;
+            background: white;
+            color: #4f46e5;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+        }
+
+        .dashboard-btn:hover {
+            background: #eef2ff;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 850px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main-content {
+                margin-left: 210px;
+                width: calc(100% - 210px);
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🤖
+        </div>
+
+        <h2>AI Business<br>Intelligence</h2>
+
+        <p>Smart Business Management</p>
+
+    </div>
+
+
+    <div class="nav">
+
+        <a href="index.php">
+            🏠 Dashboard
+        </a>
+
+        <a href="sales.html">
+            💰 Sales / Billing
+        </a>
+
+        <a href="purchases.html">
+            🛒 Purchases
+        </a>
+
+        <a href="expenses.html">
+            💵 Expenses
+        </a>
+
+        <a href="customers.html">
+            👥 Customers
+        </a>
+
+        <a href="products.html">
+            📦 Products
+        </a>
+
+        <a href="transactions.php">
+            📋 Transactions
+        </a>
+
+        <a href="reports.php">
+            📄 Reports
+        </a>
+
+        <a href="ai_assistant.html" class="active">
+            🤖 AI Assistant
+        </a>
+
+        <a href="ai_insights.php">
+            💡 AI Insights
+        </a>
+
+        <a href="analytics.php">
+            📊 Analytics
+        </a>
+
+        <a href="logout.php">
+            🚪 Logout
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- MAIN CONTENT -->
+
+<div class="main-content">
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>AI Business Assistant</h1>
+
+            <p>
+                Enter business transactions using text, voice or documents.
+            </p>
+
+        </div>
+
+        <div class="header-icon">
+            🤖
+        </div>
+
+    </div>
+
+
+    <!-- AI FORM -->
+
+    <div class="ai-card">
+
+        <div class="ai-title">
+
+            <div class="ai-title-icon">
+                🧠
+            </div>
+
+            <div>
+
+                <h2>Smart Transaction Processing</h2>
+
+                <p>
+                    Let AI understand your business transaction automatically.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <form action="ai_process.php" method="POST">
+
+            <div class="form-group">
+
+                <label>Enter Business Transaction</label>
+
+                <textarea
+                    name="user_input"
+                    rows="6"
+                    placeholder="Example: Tenkasi branch sold 2 laptops for ₹80000 to Kumar"
+                    required></textarea>
+
+            </div>
+
+
+            <input
+                type="hidden"
+                name="input_method"
+                id="input_method"
+                value="Text">
+
+
+            <div class="action-row">
+
+                <button
+                    type="button"
+                    id="voiceBtn"
+                    class="voice-btn">
+                    🎤 Speak
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="process-btn">
+                    ✨ Process with AI
+                </button>
+
+            </div>
+
+
+            <div class="document-section">
+
+                <h3>📄 Document Processing</h3>
+
+                <p>
+                    Upload an invoice or business document and let AI extract transaction details.
+                </p>
+
+                <a
+                    href="document_upload.php"
+                    class="document-btn">
+                    📄 Upload Document
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- FEATURE CARDS -->
+
+    <div class="info-grid">
+
+        <div class="info-card">
+
+            <div class="icon">💬</div>
+
+            <h3>Text Input</h3>
+
+            <p>
+                Enter transactions naturally using simple business sentences.
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <div class="icon">🎤</div>
+
+            <h3>Voice Input</h3>
+
+            <p>
+                Speak your transaction and AI converts your voice into structured data.
+            </p>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <div class="icon">📄</div>
+
+            <h3>Document Input</h3>
+
+            <p>
+                Upload invoices or documents and extract transaction information automatically.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="page-footer">
+
+        <a href="index.php" class="dashboard-btn">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+const voiceBtn = document.getElementById("voiceBtn");
+
+const textarea =
+    document.querySelector("textarea[name='user_input']");
+
+const inputMethod =
+    document.getElementById("input_method");
+
+
+voiceBtn.addEventListener("click", () => {
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+    if (!SpeechRecognition) {
+
+        alert(
+            "Voice input is not supported in this browser."
+        );
+
+        return;
+
+    }
+
+
+    const recognition =
+        new SpeechRecognition();
+
+
+    recognition.lang = "en-IN";
+
+    recognition.continuous = false;
+
+    recognition.interimResults = false;
+
+
+    recognition.start();
+
+
+    voiceBtn.innerText =
+        "🎙️ Listening...";
+
+
+    recognition.onresult = (event) => {
+
+        textarea.value =
+            event.results[0][0].transcript;
+
+        inputMethod.value =
+            "Voice";
+
+        voiceBtn.innerText =
+            "🎤 Speak";
+
+    };
+
+
+    recognition.onerror = () => {
+
+        voiceBtn.innerText =
+            "🎤 Speak";
+
+        alert(
+            "Voice input failed. Please try again."
+        );
+
+    };
+
+
+    recognition.onend = () => {
+
+        voiceBtn.innerText =
+            "🎤 Speak";
+
+    };
+
+});
+
+</script>
+
+
+</body>
+
+</html>

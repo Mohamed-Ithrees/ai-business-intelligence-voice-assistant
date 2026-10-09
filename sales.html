@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sales | AI Business Intelligence</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6fb;
+            color: #172033;
+        }
+
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 260px;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #111827, #1e293b);
+            color: white;
+            padding: 25px 18px;
+            box-sizing: border-box;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        .brand {
+            padding: 5px 12px 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            margin-bottom: 14px;
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 19px;
+            line-height: 1.3;
+        }
+
+        .brand p {
+            margin: 7px 0 0;
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        .nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 14px;
+            margin: 5px 0;
+            border-radius: 10px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .nav a:hover {
+            background: rgba(99,102,241,0.18);
+            color: white;
+        }
+
+        .nav a.active {
+            background: linear-gradient(90deg, #6366f1, #4f46e5);
+            color: white;
+            box-shadow: 0 7px 18px rgba(79,70,229,0.25);
+        }
+
+        /* MAIN */
+
+        .main-content {
+            margin-left: 260px;
+            width: calc(100% - 260px);
+            padding: 32px;
+            box-sizing: border-box;
+        }
+
+        /* HEADER */
+
+        .page-header {
+            background: linear-gradient(135deg, #111827, #4f46e5);
+            color: white;
+            border-radius: 22px;
+            padding: 30px 34px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 15px 35px rgba(30,41,59,0.15);
+        }
+
+        .page-header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #dbeafe;
+            font-size: 13px;
+        }
+
+        .header-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        /* FORM CARD */
+
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 900px;
+            box-shadow: 0 10px 28px rgba(15,23,42,0.07);
+        }
+
+        .form-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 25px;
+        }
+
+        .form-title-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 13px;
+            background: #eef2ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .form-title h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .form-title p {
+            margin: 5px 0 0;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px 14px;
+            border: 1px solid #dbe2ea;
+            border-radius: 10px;
+            background: #f8fafc;
+            color: #172033;
+            font-size: 13px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #6366f1;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.10);
+        }
+
+        /* BUTTON */
+
+        .form-actions {
+            margin-top: 25px;
+            padding-top: 22px;
+            border-top: 1px solid #eef2f7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .helper-text {
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        .save-btn {
+            border: none;
+            padding: 13px 24px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 7px 16px rgba(79,70,229,0.25);
+            transition: 0.2s;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79,70,229,0.32);
+        }
+
+        /* INFO CARDS */
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            max-width: 900px;
+            margin-top: 20px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 18px;
+            border-radius: 15px;
+            border: 1px solid #edf1f7;
+        }
+
+        .info-card span {
+            font-size: 22px;
+        }
+
+        .info-card h4 {
+            margin: 10px 0 5px;
+            font-size: 13px;
+        }
+
+        .info-card p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 850px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main-content {
+                margin-left: 210px;
+                width: calc(100% - 210px);
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🤖
+            </div>
+
+            <h2>AI Business<br>Intelligence</h2>
+
+            <p>Smart Business Management</p>
+
+        </div>
+
+
+        <div class="nav">
+
+            <a href="index.php">
+                🏠 Dashboard
+            </a>
+
+            <a href="sales.html" class="active">
+                💰 Sales / Billing
+            </a>
+
+            <a href="purchases.html">
+                🛒 Purchases
+            </a>
+
+            <a href="expenses.html">
+                💵 Expenses
+            </a>
+
+            <a href="customers.html">
+                👥 Customers
+            </a>
+
+            <a href="products.html">
+                📦 Products
+            </a>
+
+            <a href="transactions.php">
+                📋 Transactions
+            </a>
+
+            <a href="reports.php">
+                📄 Reports
+            </a>
+
+            <a href="ai_assistant.html">
+                🤖 AI Assistant
+            </a>
+
+            <a href="ai_insights.php">
+                💡 AI Insights
+            </a>
+
+            <a href="analytics.php">
+                📊 Analytics
+            </a>
+
+            <a href="logout.php">
+                🚪 Logout
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAIN CONTENT -->
+
+    <div class="main-content">
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div>
+
+                <h1>Sales Management</h1>
+
+                <p>
+                    Create and manage your business sales from one place.
+                </p>
+
+            </div>
+
+
+            <div class="header-icon">
+                💰
+            </div>
+
+        </div>
+
+
+        <!-- FORM CARD -->
+
+        <div class="form-card">
+
+            <div class="form-title">
+
+                <div class="form-title-icon">
+                    💰
+                </div>
+
+                <div>
+
+                    <h2>New Sale</h2>
+
+                    <p>
+                        Enter customer, product and payment details
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form action="save_sale.php" method="POST">
+
+
+                <div class="form-grid">
+
+
+                    <!-- BRANCH -->
+
+                    <div class="form-group">
+
+                        <label>Branch</label>
+
+                        <select name="branch" required>
+
+                            <option value="">
+                                Select Branch
+                            </option>
+
+                            <option value="Tenkasi">
+                                Tenkasi
+                            </option>
+
+                            <option value="Surandai">
+                                Surandai
+                            </option>
+
+                            <option value="Madurai">
+                                Madurai
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- CUSTOMER -->
+
+                    <div class="form-group">
+
+                        <label>Customer Name</label>
+
+                        <input
+                            type="text"
+                            name="customer"
+                            placeholder="Enter customer name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- PRODUCT -->
+
+                    <div class="form-group">
+
+                        <label>Product</label>
+
+                        <input
+                            type="text"
+                            name="product"
+                            placeholder="Enter product name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- QUANTITY -->
+
+                    <div class="form-group">
+
+                        <label>Quantity</label>
+
+                        <input
+                            type="number"
+                            name="quantity"
+                            placeholder="Enter quantity"
+                            min="1"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- AMOUNT -->
+
+                    <div class="form-group">
+
+                        <label>Amount (₹)</label>
+
+                        <input
+                            type="number"
+                            name="amount"
+                            placeholder="Enter sale amount"
+                            min="0"
+                            step="0.01"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- PAYMENT STATUS -->
+
+                    <div class="form-group">
+
+                        <label>Payment Status</label>
+
+                        <select name="payment_status">
+
+                            <option value="Paid">
+                                Paid
+                            </option>
+
+                            <option value="Pending">
+                                Pending
+                            </option>
+
+                            <option value="Partial">
+                                Partial
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- DATE -->
+
+                    <div class="form-group">
+
+                        <label>Sale Date</label>
+
+                        <input
+                            type="date"
+                            name="date"
+                            required
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- FORM ACTIONS -->
+
+                <div class="form-actions">
+
+                    <div class="helper-text">
+                        All sales details will be stored in your business database.
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="save-btn"
+                    >
+                        Save Sale →
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+
+        <!-- INFORMATION CARDS -->
+
+        <div class="info-grid">
+
+            <div class="info-card">
+
+                <span>💰</span>
+
+                <h4>Sales Tracking</h4>
+
+                <p>
+                    Record and manage all customer sales transactions.
+                </p>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <span>👤</span>
+
+                <h4>Customer Details</h4>
+
+                <p>
+                    Store customer and transaction information for analysis.
+                </p>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <span>📊</span>
+
+                <h4>Business Analysis</h4>
+
+                <p>
+                    Sales data can be used for reports and Power BI analytics.
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</body>
+
+</html>

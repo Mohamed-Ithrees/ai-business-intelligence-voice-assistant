@@ -1,0 +1,364 @@
+<?php
+
+include "db.php";
+
+$branch = $_POST['branch'];
+$expense_type = $_POST['expense_type'];
+$amount = $_POST['amount'];
+$payment_status = $_POST['payment_status'];
+$date = $_POST['date'];
+
+if ($payment_status == "Partially Paid") {
+    $payment_status = "Partial";
+}
+
+/* Branch check */
+$stmt = $conn->prepare(
+    "SELECT branch_id FROM branches WHERE branch_name = ?"
+);
+
+$stmt->bind_param("s", $branch);
+$stmt->execute();
+
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+
+    $row = $result->fetch_assoc();
+    $branch_id = $row['branch_id'];
+
+} else {
+
+    $stmt = $conn->prepare(
+        "INSERT INTO branches (branch_name) VALUES (?)"
+    );
+
+    $stmt->bind_param("s", $branch);
+    $stmt->execute();
+
+    $branch_id = $conn->insert_id;
+}
+
+
+/* Save Expense */
+$stmt = $conn->prepare(
+    "INSERT INTO transactions
+    (branch_id, transaction_type, transaction_date,
+     quantity, amount, payment_status,
+     input_method, description)
+    VALUES (?, 'Expense', ?, 1, ?, ?, 'Manual', ?)"
+);
+
+$stmt->bind_param(
+    "isdss",
+    $branch_id,
+    $date,
+    $amount,
+    $payment_status,
+    $expense_type
+);
+
+
+/* =========================
+   SUCCESS PAGE
+   ========================= */
+
+if ($stmt->execute()) {
+
+    $formatted_amount = number_format((float)$amount, 2);
+
+    echo '
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Expense Saved Successfully</title>
+
+        <style>
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family: Arial, sans-serif;
+                background: #f4f6fb;
+                color: #172033;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 30px;
+            }
+
+            .success-wrapper {
+                width: 100%;
+                max-width: 650px;
+            }
+
+            .success-card {
+                background: #ffffff;
+                border-radius: 24px;
+                padding: 45px;
+                text-align: center;
+                box-shadow: 0 15px 40px rgba(15, 23, 42, 0.12);
+                border: 1px solid #e8edf5;
+            }
+
+            .success-icon {
+                width: 82px;
+                height: 82px;
+                margin: 0 auto 25px;
+                border-radius: 50%;
+                background: #dcfce7;
+                color: #16a34a;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 42px;
+                font-weight: bold;
+            }
+
+            .success-card h1 {
+                font-size: 30px;
+                margin-bottom: 10px;
+                color: #111827;
+            }
+
+            .success-message {
+                color: #64748b;
+                font-size: 15px;
+                margin-bottom: 30px;
+            }
+
+            .amount-box {
+                background: #f8fafc;
+                border: 1px solid #e2e8f0;
+                border-radius: 16px;
+                padding: 22px;
+                margin-bottom: 30px;
+            }
+
+            .amount-label {
+                color: #64748b;
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+
+            .amount {
+                font-size: 30px;
+                font-weight: bold;
+                color: #f59e0b;
+            }
+
+            .details {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 14px;
+                margin-bottom: 30px;
+                text-align: left;
+            }
+
+            .detail-box {
+                background: #f8fafc;
+                border-radius: 12px;
+                padding: 15px;
+            }
+
+            .detail-label {
+                font-size: 12px;
+                color: #64748b;
+                margin-bottom: 5px;
+            }
+
+            .detail-value {
+                font-size: 14px;
+                font-weight: bold;
+                color: #172033;
+            }
+
+            .buttons {
+                display: flex;
+                gap: 14px;
+                justify-content: center;
+            }
+
+            .btn {
+                text-decoration: none;
+                padding: 14px 22px;
+                border-radius: 12px;
+                font-size: 14px;
+                font-weight: bold;
+                transition: 0.2s;
+            }
+
+            .btn-primary {
+                background: #f59e0b;
+                color: white;
+            }
+
+            .btn-primary:hover {
+                background: #d97706;
+            }
+
+            .btn-secondary {
+                background: #eef2f7;
+                color: #172033;
+            }
+
+            .btn-secondary:hover {
+                background: #e2e8f0;
+            }
+
+            .footer-text {
+                margin-top: 25px;
+                color: #94a3b8;
+                font-size: 12px;
+            }
+
+            @media (max-width: 600px) {
+
+                .success-card {
+                    padding: 30px 20px;
+                }
+
+                .success-card h1 {
+                    font-size: 24px;
+                }
+
+                .details {
+                    grid-template-columns: 1fr;
+                }
+
+                .buttons {
+                    flex-direction: column;
+                }
+
+                .btn {
+                    width: 100%;
+                }
+
+            }
+
+        </style>
+
+    </head>
+
+    <body>
+
+        <div class="success-wrapper">
+
+            <div class="success-card">
+
+                <div class="success-icon">
+                    ✓
+                </div>
+
+                <h1>Expense Saved Successfully!</h1>
+
+                <p class="success-message">
+                    Your expense transaction has been recorded successfully.
+                </p>
+
+                <div class="amount-box">
+
+                    <div class="amount-label">
+                        Expense Amount
+                    </div>
+
+                    <div class="amount">
+                        ₹' . $formatted_amount . '
+                    </div>
+
+                </div>
+
+                <div class="details">
+
+                    <div class="detail-box">
+
+                        <div class="detail-label">
+                            Branch
+                        </div>
+
+                        <div class="detail-value">
+                            ' . htmlspecialchars($branch) . '
+                        </div>
+
+                    </div>
+
+                    <div class="detail-box">
+
+                        <div class="detail-label">
+                            Expense Type
+                        </div>
+
+                        <div class="detail-value">
+                            ' . htmlspecialchars($expense_type) . '
+                        </div>
+
+                    </div>
+
+                    <div class="detail-box">
+
+                        <div class="detail-label">
+                            Payment Status
+                        </div>
+
+                        <div class="detail-value">
+                            ' . htmlspecialchars($payment_status) . '
+                        </div>
+
+                    </div>
+
+                    <div class="detail-box">
+
+                        <div class="detail-label">
+                            Date
+                        </div>
+
+                        <div class="detail-value">
+                            ' . htmlspecialchars($date) . '
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="buttons">
+
+                    <a href="expenses.html" class="btn btn-primary">
+                        + Add Another Expense
+                    </a>
+
+                    <a href="index.php" class="btn btn-secondary">
+                        Go to Dashboard
+                    </a>
+
+                </div>
+
+                <div class="footer-text">
+                    AI Business Intelligence • Expense Management
+                </div>
+
+            </div>
+
+        </div>
+
+    </body>
+    </html>
+    ';
+
+} else {
+
+    echo "Error saving expense: " . $stmt->error;
+}
+
+$conn->close();
+
+?>

@@ -1,0 +1,25 @@
+
+# Secrets and environment files
+.env
+.env.*
+!.env.example
+
+# Uploaded documents and private data
+uploads/
+uploads/**
+
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local configuration and logs
+*.log
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+
+config.local.php
