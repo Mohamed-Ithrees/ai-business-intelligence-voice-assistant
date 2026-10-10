@@ -82,7 +82,31 @@ Mohamed Ithrees J
 
 \## Note
 
+## Live Demo
+[AI Business Intelligence Website](https://ithreesai2026.freehosting.dev/)
 
+## Project Overview
+AI Business Intelligence is a web-based project designed to manage business data and display useful business insights through a dashboard.
+
+## Features
+- Business dashboard with sales, purchases, expenses, and profit
+- Customer and product management
+- Sales and purchase tracking
+- Reports and analytics
+- AI assistant and document upload
+
+## Technologies Used
+- Python
+- Flask
+- PHP
+- MySQL
+- HTML
+- CSS
+- Pandas
+
+## Project Links
+- **GitHub Repository:** https://github.com/Mohamed-Ithrees/ai-business-intelligence-voice-assistant
+- **Live Website:** https://ithreesai2026.freehosting.dev/
 
 This project is intended for learning and portfolio demonstration. Configure credentials securely before deployment.
 
